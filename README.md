@@ -3,6 +3,8 @@ Utilizar redes neurais convolucionais para tarefas de visão computacional.
 
 ![alt text](gif.gif)
 
+É possível anexar a foto de um número, e os modelos convolucional e linear irão identificar qual número está na imagem. Além disso, tem-se também o tempo de inferência que cada modelo levou para identificar a imagem de input.
+
 Para ver a demonstração completa, [clique aqui](https://drive.google.com/file/d/1BNCYyMlQ8iXJFrxA4G6YCcKuIYOgiWiS/view?usp=sharing)
 
 ---
