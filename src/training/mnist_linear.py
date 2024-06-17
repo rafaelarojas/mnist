@@ -27,7 +27,7 @@ model_mlp = Sequential([
 model_mlp.compile(optimizer=Adam(), loss='categorical_crossentropy', metrics=['accuracy'])
 
 start_time = time.time()
-history_mlp = model_mlp.fit(x_train_norm, y_train_cat, epochs=10, validation_split=0.2)
+history_mlp = model_mlp.fit(x_train_norm, y_train_cat, epochs=20, validation_split=0.2)
 mlp_training_time = time.time() - start_time
 
 model_mlp.save('model_linear.h5')
@@ -35,21 +35,4 @@ model_mlp.save('model_linear.h5')
 mlp_evaluation = model_mlp.evaluate(x_test_norm, y_test_cat)
 
 print(f"MLP - Tempo de Treinamento: {mlp_training_time} segundos")
-print(f"MLP - Desempenho: {mlp_evaluation}")
-
-plt.figure(figsize=(12, 4))
-plt.subplot(1, 2, 1)
-plt.plot(history_mlp.history['accuracy'], label='Acurácia Treino')
-plt.plot(history_mlp.history['val_accuracy'], label='Acurácia Validação')
-plt.xlabel('Épocas')
-plt.ylabel('Acurácia')
-plt.legend()
-
-plt.subplot(1, 2, 2)
-plt.plot(history_mlp.history['loss'], label='Perda Treino')
-plt.plot(history_mlp.history['val_loss'], label='Perda Validação')
-plt.xlabel('Épocas')
-plt.ylabel('Perda')
-plt.legend()
-
-plt.show()
+print(f"MLP - Acurácia: {mlp_evaluation[1]}")

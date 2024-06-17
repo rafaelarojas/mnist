@@ -32,7 +32,7 @@ model_cnn = Sequential([
 model_cnn.compile(optimizer=Adam(), loss='categorical_crossentropy', metrics=['accuracy'])
 
 start_time = time.time()
-history_cnn = model_cnn.fit(x_train_norm, y_train_cat, epochs=10, validation_split=0.2)
+history_cnn = model_cnn.fit(x_train_norm, y_train_cat, epochs=20, validation_split=0.2)
 cnn_training_time = time.time() - start_time
 
 model_cnn.save('model_cnn.h5')
@@ -40,20 +40,4 @@ model_cnn.save('model_cnn.h5')
 cnn_evaluation = model_cnn.evaluate(x_test_norm, y_test_cat)
 
 print(f"CNN - Tempo de Treinamento: {cnn_training_time} segundos")
-print(f"CNN - Desempenho: {cnn_evaluation}")
-
-plt.subplot(1, 2, 1)
-plt.plot(history_cnn.history['accuracy'], label='Acurácia Treino')
-plt.plot(history_cnn.history['val_accuracy'], label='Acurácia Validação')
-plt.xlabel('Épocas')
-plt.ylabel('Acurácia')
-plt.legend()
-
-plt.subplot(1, 2, 2)
-plt.plot(history_cnn.history['loss'], label='Perda Treino')
-plt.plot(history_cnn.history['val_loss'], label='Perda Validação')
-plt.xlabel('Épocas')
-plt.ylabel('Perda')
-plt.legend()
-
-plt.show()
+print(f"CNN - Acurácia: {cnn_evaluation[1]}")
