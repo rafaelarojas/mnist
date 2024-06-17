@@ -1,22 +1,25 @@
 # Aplicação prática de Redes Convolucionais
 Utilizar redes neurais convolucionais para tarefas de visão computacional.
 
+![alt text](gif.gif)
+
+Para ver a demonstração completa, [clique aqui](https://drive.google.com/file/d/1BNCYyMlQ8iXJFrxA4G6YCcKuIYOgiWiS/view?usp=sharing)
+
 ---
 ### Modelos
 
-Foi feita uma comparação dos modelos, considerando que ambos foram treinados com x épocas.
+Foi feita uma comparação dos modelos, considerando que ambos foram treinados com 100 épocas.
 
 ##### Modelo linear
 |    Tempo de treinamento   |    Acurácia    |
 | ------------------------- | -------------- |
-| A                         | 1              |
-| B                         | 2              |
+| 227.295852184295 segundos | 0.984300017    |
 
 ##### Modelo convolucional
 |    Tempo de treinamento   |    Acurácia    |
 | ------------------------- | -------------- |
-| A                         | 1              |
-| B                         | 2              |
+| 444.202180147171 segundos | 0.994499981    |
+
 
 ---
 ### Execução
