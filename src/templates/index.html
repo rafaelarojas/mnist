@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MNIST</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f0ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        .container {
+            width: 80%;
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333333;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type=file] {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            background-color: #ffffff;
+        }
+
+        input[type=submit] {
+            padding: 10px 20px;
+            background-color: #8a4dff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type=submit]:hover {
+            background-color: #6a1bb3;
+        }
+
+        #resultados {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        #resultado_cnn, #resultado_mlp {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f2f2f2;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+        }
+
+        #informacoes {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Faça o upload da imagem de um número</h1>
+        <form id="uploadForm" action="/predict" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <br>
+            <input type="submit" value="Enviar">
+        </form>
+        
+        <h2>Resultados da Predição:</h2>
+        <div id="resultados">
+            <p id="resultado_cnn"></p>
+            <p id="resultado_mlp"></p>
+        </div>
+        
+        <h2>Informações Adicionais:</h2>
+        <div id="informacoes">
+            <p><strong>Modelo CNN:</strong></p>
+            <p>Tempo de inferência: <span id="inference_time_cnn"></span> segundos</p>
+            <br>
+            <p><strong>Modelo MLP:</strong></p>
+            <p>Tempo de inferência: <span id="inference_time_mlp"></span> segundos</p>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('uploadForm').onsubmit = async function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('file', document.querySelector('input[type=file]').files[0]);
+            
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            
+            document.getElementById('resultado_cnn').textContent = `Predição do modelo CNN: ${data.digit_cnn}`;
+            document.getElementById('resultado_mlp').textContent = `Predição do modelo linear: ${data.digit_mlp}`;
+            
+            document.getElementById('inference_time_cnn').textContent = data.inference_time_cnn.toFixed(5);
+            document.getElementById('inference_time_mlp').textContent = data.inference_time_mlp.toFixed(5);
+        };
+    </script>
+</body>
+</html>
