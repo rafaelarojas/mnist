@@ -19,8 +19,8 @@ model_mlp = load_model(mlp_weights_path)
 def index():
     return render_template('index.html')
 
-@app.route('/predict', methods=['POST'])
-def predict():
+@app.route('/predict_cnn', methods=['POST'])
+def predict_cnn():
     file = request.files['file']
     if not file:
         return jsonify({'error': 'Nenhuma imagem enviada'}), 400
@@ -38,6 +38,27 @@ def predict():
         inference_time_cnn = end_time_cnn - start_time_cnn
         digit_cnn = np.argmax(prediction_cnn)
 
+        return jsonify({
+            'digit_cnn': int(digit_cnn),
+            'inference_time_cnn': inference_time_cnn
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/predict_mlp', methods=['POST'])
+def predict_mlp():
+    file = request.files['file']
+    if not file:
+        return jsonify({'error': 'Nenhuma imagem enviada'}), 400
+
+    try:
+        image_stream = io.BytesIO(file.read())
+        
+        img = load_img(image_stream, target_size=(28, 28), color_mode='grayscale')
+        img_array = img_to_array(img) / 255.0
+        img_array = np.expand_dims(img_array, axis=0)
+
         start_time_mlp = time.time()
         prediction_mlp = model_mlp.predict(img_array)
         end_time_mlp = time.time()
@@ -45,9 +66,7 @@ def predict():
         digit_mlp = np.argmax(prediction_mlp)
 
         return jsonify({
-            'digit_cnn': int(digit_cnn),
             'digit_mlp': int(digit_mlp),
-            'inference_time_cnn': inference_time_cnn,
             'inference_time_mlp': inference_time_mlp
         })
 

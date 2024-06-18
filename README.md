@@ -24,6 +24,64 @@ Foi feita uma comparação dos modelos, considerando que ambos foram treinados c
 
 
 ---
+### Rotas
+
+#### Rota princial
+
+`GET /`
+- Descrição: Renderiza a página inicial da aplicação, onde o usuário pode fazer upload de uma imagem para predição.
+- Parâmetros de Consulta: Nenhum.
+- Resposta: HTML - Renderiza o arquivo index.html.
+
+#### Rota da predição com CNN
+
+`POST /predict_cnn`
+- Descrição: Recebe uma imagem de um dígito manuscrito e retorna a predição feita pelo modelo CNN.
+- Parâmetros do Corpo da Requisição: file - Arquivo de imagem a ser enviado no formato multipart/form-data.
+- Resposta:
+```json
+
+    {
+        "digit_cnn": int,
+        "inference_time_cnn": float
+    }
+
+```
+    `digit_cnn`: Dígito predito pelo modelo CNN.
+    `inference_time_cnn`: Tempo de inferência do modelo CNN em segundos.
+
+- Exemplo de Requisição:
+```
+POST /predict_cnn
+Content-Type: multipart/form-data
+```
+
+- Corpo da Requisição: `file: imagem.png`
+
+#### Rota da predição modelo linear
+
+`POST /predict_mlp`
+- Descrição: Recebe uma imagem de um dígito manuscrito e retorna a predição feita pelo modelo MLP.
+- Parâmetros do Corpo da Requisição: file - Arquivo de imagem a ser enviado no formato multipart/form-data.
+- Resposta:
+```json
+ {
+    "digit_mlp": int,
+    "inference_time_mlp": float
+}
+```
+    `digit_mlp`: Dígito predito pelo modelo MLP.
+    `inference_time_mlp`: Tempo de inferência do modelo MLP em segundos.
+
+- Exemplo de Requisição:
+```
+POST /predict_mlp
+Content-Type: multipart/form-data
+```
+
+- Corpo da Requisição: `file: imagem.png`
+
+---
 ### Execução
 
 1. Clone este repositório

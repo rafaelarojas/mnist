@@ -41,7 +41,7 @@
             background-color: #ffffff;
         }
 
-        input[type=submit] {
+        input[type=button] {
             padding: 10px 20px;
             background-color: #8a4dff;
             color: white;
@@ -49,9 +49,10 @@
             border-radius: 4px;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin: 5px;
         }
 
-        input[type=submit]:hover {
+        input[type=button]:hover {
             background-color: #6a1bb3;
         }
 
@@ -77,11 +78,10 @@
 <body>
     <div class="container">
         <h1>Faça o upload da imagem de um número</h1>
-        <form id="uploadForm" action="/predict" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file">
-            <br>
-            <input type="submit" value="Enviar">
-        </form>
+        <input type="file" id="fileInput">
+        <br>
+        <input type="button" value="Enviar para CNN" onclick="sendRequest('cnn')">
+        <input type="button" value="Enviar para MLP" onclick="sendRequest('mlp')">
         
         <h2>Resultados da Predição:</h2>
         <div id="resultados">
@@ -100,25 +100,31 @@
     </div>
     
     <script>
-        document.getElementById('uploadForm').onsubmit = async function(event) {
-            event.preventDefault();
-            
+        async function sendRequest(model) {
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput.files.length === 0) {
+                alert('Por favor, selecione um arquivo');
+                return;
+            }
+
             const formData = new FormData();
-            formData.append('file', document.querySelector('input[type=file]').files[0]);
+            formData.append('file', fileInput.files[0]);
             
-            const response = await fetch('/predict', {
+            const response = await fetch(`/predict_${model}`, {
                 method: 'POST',
                 body: formData
             });
 
             const data = await response.json();
-            
-            document.getElementById('resultado_cnn').textContent = `Predição do modelo CNN: ${data.digit_cnn}`;
-            document.getElementById('resultado_mlp').textContent = `Predição do modelo linear: ${data.digit_mlp}`;
-            
-            document.getElementById('inference_time_cnn').textContent = data.inference_time_cnn.toFixed(5);
-            document.getElementById('inference_time_mlp').textContent = data.inference_time_mlp.toFixed(5);
-        };
+
+            if (model === 'cnn') {
+                document.getElementById('resultado_cnn').textContent = `Predição do modelo CNN: ${data.digit_cnn}`;
+                document.getElementById('inference_time_cnn').textContent = data.inference_time_cnn.toFixed(5);
+            } else {
+                document.getElementById('resultado_mlp').textContent = `Predição do modelo linear: ${data.digit_mlp}`;
+                document.getElementById('inference_time_mlp').textContent = data.inference_time_mlp.toFixed(5);
+            }
+        }
     </script>
 </body>
 </html>
